@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
 import Person from "./Person";
+import styled from "styled-components";
 
 
 const PeopleList = () =>{
 
 const [data, setData]= useState([]);
-const [card, setCard]= useState(1);
 
-const getData = () =>{
+  useEffect(() =>{
   axios
     .get(`https://swapi.co/api/people/`)
     .then(response =>{
@@ -18,12 +18,11 @@ const getData = () =>{
     .catch(error =>{
       console.log(error);
     })
-};
+  },[]);
 
-useEffect(getData, [card])
 return (
-  <div>
-    <div>
+  <StyledPeopleList>
+  <div className="peopleList">
       {data.map((person, index) =>{
         return <Person 
                   name={person.name}
@@ -36,13 +35,17 @@ return (
                   media={person.url}
                 />
               })}
-    </div>
-    <div className="buttons">
-      <button type="button" onClick={() => setCard(card-1)}>Previous</button>
-      <button type="button" onClick={() => setCard(card+1)}>Next</button>
-    </div>
   </div>
-)
+   </StyledPeopleList>
+)}
+
+const StyledPeopleList = styled.div `
+.peopleList{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
+`;
 
 export default PeopleList;
